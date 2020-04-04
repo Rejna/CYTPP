@@ -115,9 +115,9 @@
         var header = document.getElementById("header");
         header.innerText = songs[currentSong].name;
         var prev = document.getElementById("prev");
-        prev.href = './index.html/?songId=' + ((currentSong - 1) % (songs.length));
+        prev.href = './?songId=' + ((currentSong - 1) % (songs.length));
         var next = document.getElementById("next");
-        next.href = './index.html/?songId=' + ((currentSong + 1) % (songs.length));
+        next.href = './?songId=' + ((currentSong + 1) % (songs.length));
         console.log(songs[currentSong]);
       }
 
@@ -128,8 +128,8 @@
 
       function onPlayerStateChange(event) {
         if(event.data == YT.PlayerState.ENDED) {
-          window.location.href = './index.html/?songId=' + ((currentSong + 1) % (songs.length));
-          location.reload();
+          window.location.href = './?songId=' + ((currentSong + 1) % (songs.length));
+          //location.reload();
         }
       }
     </script>
