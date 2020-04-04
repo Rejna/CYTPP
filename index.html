@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom YouTube Playlist Player</title>
+  </head>
+  <body>
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="header"></div>
+    <div id="player"></div><br />
+    <a id="prev" href="">&lt;&lt;</a><span>      </span><a id="next" href="">&gt;&gt;</a>
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      var currentSong = parseInt(urlParams.get('songId'));
+      var songs = [
+        {
+          id: '-wTDsCplARY',
+          name: 'Furret Walk with Lyrics',
+          start: 0,
+          end: 104
+        },
+        {
+          id: 'VMycOhwjhQg',
+          name: '10 Levels of Spooky Scary Skeletons',
+          start: 36,
+          end: 172
+        },
+        {
+          id: 'xzD0M1MXGqY',
+          name: 'Furret Walk with Fan Lyrics',
+          start: 0
+        },
+        {
+          id: 'E-MaslEgG9o',
+          name: 'Furretalovania',
+          start: 0,
+          end: 131
+        },
+        {
+          id: 'jEK89ZhTVes',
+          name: 'Hit on run',
+          start: 0
+        },
+        {
+          id: 'P9-SUS1j1vE',
+          name: 'Just wait a moment...',
+          start: 0
+        },
+        {
+          id: 'iF2dhmiEMIc',
+          name: 'Hit on run Drum Cover',
+          start: 0
+        },
+        {
+          id: 'kIP8kkqp5gY',
+          name: 'Suzumu - Kasyokusei: Idol Syoukougun',
+          start: 2
+        },
+        {
+          id: 'ulxoIly3jt4',
+          name: '0 strings bass solo',
+          start: 0,
+          end: 144
+        },
+        {
+          id: 'cytyAgu9-bA',
+          name: 'Impossible Deadmaus bass line',
+          start: 18,
+          end: 135
+        },
+        {
+          id: '97KLphniRAA',
+          name: 'Slayer - Bloodline ukulele cover',
+          start: 0,
+          end: 202
+        },
+        {
+          id: 'KEodtWN7Xb0',
+          name: 'Slayer - Payback ukulele cover',
+          start: 0,
+          end: 222
+        },
+        {
+          id: 'cRdlY_usbiA',
+          name: 'Slayer - Piece by piece ukulele cover',
+          start: 0,
+          end: 190
+        }
+      ]
+
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '360',
+          width: '640',
+          playerVars: {
+            start: songs[currentSong].start,
+            end: songs[currentSong].end,
+            autoplay: 1
+          },
+          videoId: songs[currentSong].id,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+        var header = document.getElementById("header");
+        header.innerText = songs[currentSong].name;
+        var prev = document.getElementById("prev");
+        prev.href = './index.html/?songId=' + ((currentSong - 1) % (songs.length));
+        var next = document.getElementById("next");
+        next.href = './index.html/?songId=' + ((currentSong + 1) % (songs.length));
+        console.log(songs[currentSong]);
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      function onPlayerStateChange(event) {
+        if(event.data == YT.PlayerState.ENDED) {
+          window.location.href = './index.html/?songId=' + ((currentSong + 1) % (songs.length));
+          location.reload();
+        }
+      }
+    </script>
+  </body>
+</html>
