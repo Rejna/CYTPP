@@ -19,11 +19,12 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
-      const queryString = window.location.hash.split('=');
-      var currentSong = 0;
-      if(queryString.length == 2)
-        currentSong = parseInt(queryString[1]);
       var songs = window.page.songList;
+      const queryString = window.location.hash.split('=');
+      var currentSongId = 0;
+      if(queryString.length == 2)
+        currentSongId = parseInt(queryString[1]);
+      var currentSong = songs[currentSongId];
 
       var player;
       function onYouTubeIframeAPIReady() {
@@ -31,18 +32,18 @@
           height: '360',
           width: '640',
           playerVars: {
-            start: songs[currentSong].start,
-            end: songs[currentSong].end,
+            start: currentSong.start,
+            end: currentSong.end,
             autoplay: 1
           },
-          videoId: songs[currentSong].id,
+          videoId: currentSong.id,
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
           }
         });
         var header = document.getElementById("header");
-        header.innerText = songs[currentSong].name;
+        header.innerText = (currentSongId + 1) + ". " + currentSong.name;
       }
 
       // 4. The API will call this function when the video player is ready.
@@ -52,7 +53,7 @@
 
       function onPlayerStateChange(event) {
         if(event.data == YT.PlayerState.ENDED) {
-          window.location.href = './local.html#songId=' + ((currentSong + 1) % (songs.length));
+          window.location.href = './local.html#songId=' + mod(currentSongId + 1, songs.length);
           location.reload();
         }
       }
@@ -62,12 +63,12 @@
       }
 
       function prev() {
-        window.location.href = './local.html#songId=' + ((currentSong - 1) % (songs.length));
+        window.location.href = './local.html#songId=' + mod(currentSongId - 1, songs.length);
         location.reload();
       }
 
       function next() {
-        window.location.href = './local.html#songId=' + ((currentSong + 1) % (songs.length));
+        window.location.href = './local.html#songId=' + mod(currentSongId + 1, songs.length);
         location.reload();
       }
     </script>

@@ -19,12 +19,13 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
+      var songs = window.page.songList;
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      var currentSong = 0;
+      var currentSongId = 0;
       if(queryString != "")
-        currentSong = parseInt(urlParams.get('songId'));
-      var songs = window.page.songList;
+        currentSongId = parseInt(urlParams.get('songId'));
+      var currentSong = songs[currentSongId];
 
       var player;
       function onYouTubeIframeAPIReady() {
@@ -32,11 +33,11 @@
           height: '360',
           width: '640',
           playerVars: {
-            start: songs[currentSong].start,
-            end: songs[currentSong].end,
+            start: currentSong.start,
+            end: currentSong.end,
             autoplay: 1
           },
-          videoId: songs[currentSong].id,
+          videoId: currentSong.id,
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -44,12 +45,11 @@
         });
 
         var header = document.getElementById("header");
-        header.innerText = songs[currentSong].name;
+        header.innerText = (currentSongId + 1) + ". " + currentSong.name;
         var prev = document.getElementById("prev");
-        prev.href = './?songId=' + mod(currentSong - 1, songs.length);
+        prev.href = './?songId=' + mod(currentSongId - 1, songs.length);
         var next = document.getElementById("next");
-        next.href = './?songId=' + mod(currentSong + 1, songs.length);
-        console.log(songs[currentSong]);
+        next.href = './?songId=' + mod(currentSongId + 1, songs.length);
       }
 
       // 4. The API will call this function when the video player is ready.
@@ -59,7 +59,7 @@
 
       function onPlayerStateChange(event) {
         if(event.data == YT.PlayerState.ENDED) {
-          window.location.href = './?songId=' + mod(currentSong + 1, songs.length);
+          window.location.href = './?songId=' + mod(currentSongId + 1, songs.length);
         }
       }
 
