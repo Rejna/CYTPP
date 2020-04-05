@@ -19,8 +19,10 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
-      const queryString = window.location.hash.split('=')[1];
-      var currentSong = parseInt(queryString);
+      const queryString = window.location.hash.split('=');
+      var currentSong = 0;
+      if(queryString.length == 2)
+        currentSong = parseInt(queryString[1]);
       var songs = window.page.songList;
 
       var player;

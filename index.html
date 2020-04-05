@@ -21,7 +21,9 @@
       //    after the API code downloads.
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      var currentSong = parseInt(urlParams.get('songId'));
+      var currentSong = 0;
+      if(queryString != "")
+        currentSong = parseInt(urlParams.get('songId'));
       var songs = window.page.songList;
 
       var player;

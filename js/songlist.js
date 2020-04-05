@@ -14,7 +14,8 @@ window.page.songList = [
     {
         id: 'xzD0M1MXGqY',
         name: 'Furret Walk with Fan Lyrics',
-        start: 0
+        start: 0,
+        end: 215
     },
     {
         id: 'E-MaslEgG9o',
@@ -35,7 +36,8 @@ window.page.songList = [
     {
         id: 'iF2dhmiEMIc',
         name: 'Hit on run Drum Cover',
-        start: 0
+        start: 0,
+        end: 223
     },
     {
         id: 'kIP8kkqp5gY',
