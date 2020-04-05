@@ -9,7 +9,7 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="header"></div>
     <div id="player"></div><br />
-    <a id="prev" href="#">&lt;&lt;</a><span>      </span><a id="next" href="#">&gt;&gt;</a>
+    <input type="button" onclick="prev()" value="&lt;&lt;"/><span></span><input type="button" onclick="next()" value="&gt;&gt;"/>
     <script>
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
@@ -19,9 +19,8 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      var currentSong = parseInt(urlParams.get('songId'));
+      const queryString = window.location.hash.split('=')[1];
+      var currentSong = parseInt(queryString);
       var songs = window.page.songList;
 
       var player;
@@ -40,14 +39,8 @@
             'onStateChange': onPlayerStateChange
           }
         });
-
         var header = document.getElementById("header");
         header.innerText = songs[currentSong].name;
-        var prev = document.getElementById("prev");
-        prev.href = './?songId=' + mod(currentSong - 1, songs.length);
-        var next = document.getElementById("next");
-        next.href = './?songId=' + mod(currentSong + 1, songs.length);
-        console.log(songs[currentSong]);
       }
 
       // 4. The API will call this function when the video player is ready.
@@ -57,12 +50,23 @@
 
       function onPlayerStateChange(event) {
         if(event.data == YT.PlayerState.ENDED) {
-          window.location.href = './?songId=' + mod(currentSong + 1, songs.length);
+          window.location.href = './local.html#songId=' + ((currentSong + 1) % (songs.length));
+          location.reload();
         }
       }
 
       function mod(n, m) {
         return ((n % m) + m) % m;
+      }
+
+      function prev() {
+        window.location.href = './local.html#songId=' + ((currentSong - 1) % (songs.length));
+        location.reload();
+      }
+
+      function next() {
+        window.location.href = './local.html#songId=' + ((currentSong + 1) % (songs.length));
+        location.reload();
       }
     </script>
   </body>
